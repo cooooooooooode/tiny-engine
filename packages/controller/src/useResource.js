@@ -57,11 +57,15 @@ const getSnippet = (component) => {
   return schema
 }
 
-const generateNode = ({ type, component }) => {
+const generateNode = ({ type, component,props }) => {
   const schema = {
     componentName: component,
     props: {},
     ...getSnippet(component)
+  }
+
+  if(props){
+    schema.props = Object.assign({},schema.props, props)
   }
 
   if (type === 'block') {
@@ -375,6 +379,7 @@ const fetchResource = async ({ isInit = true } = {}) => {
   const { Builtin } = useCanvas().canvasApi.value
   Builtin.data.materials.components[0].children.map(registerComponent)
   BuiltinComponentMaterials.components[0].children.map(registerComponent)
+  // debugger
 
   const builtinSnippets = {
     group: '内置组件',

@@ -8,21 +8,13 @@ export default {
     name: {
       type: String,
       default: ''
-    },
-    icon: {
-      type: String,
-      default: ''
-    },
+    }
   },
   setup(props) {
-    return () =>{
-      return h('span', { class: 'iconwarp' }, [
-        SvgIcons[props.name]
-          ? (h(SvgIcons[props.name]?.(), { style: { width: '100%', height: '100%' } }) || 'error.')
-          : h(Icon, { icon:props.icon, style: { width: '100%', height: '100%' } }),
+    return () =>
+      h('span', { class: 'iconwarp' }, [
+        h(Icon, { icon:props.name, style: { width: '100%', height: '100%' } }),
       ])
-    }
-
   }
 }
 </script>

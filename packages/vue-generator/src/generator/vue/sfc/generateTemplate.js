@@ -35,6 +35,7 @@ export const handleTinyIcon = (nameObj, globalHooks) => {
   if (BUILTIN_COMPONENT_NAME.ICON !== nameObj.componentName) {
     return
   }
+  debugger
 
   const name = nameObj.schema.props.name
 
@@ -42,28 +43,43 @@ export const handleTinyIcon = (nameObj, globalHooks) => {
     return
   }
 
-  const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`
-  const exportName = name.replace(TINY_ICON, 'icon')
+  if(name.includes(':')){
 
-  const success = globalHooks.addImport('@opentiny/vue-icon', {
-    componentName: exportName,
-    exportName: exportName,
-    package: '@opentiny/vue-icon',
-    version: '^3.10.0',
-    destructuring: true
-  })
-
-  // tiny icon 需要调用
-  if (success) {
-    globalHooks.addStatement({
-      position: INSERT_POSITION.BEFORE_PROPS,
-      value: `const ${iconName} = ${exportName}()`,
-      key: iconName
+    globalHooks.addImport('@iconify/vue', {
+      componentName: "Icon",
+      exportName: "Icon",
+      package: '@iconify/vue',
+      version: '^4.1.1',
+      destructuring: true
     })
   }
+  else{
+    const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`
+    const exportName = name.replace(TINY_ICON, 'icon')
 
-  nameObj.componentName = iconName
-  delete nameObj.schema.props.name
+    const success = globalHooks.addImport('@opentiny/vue-icon', {
+      componentName: exportName,
+      exportName: exportName,
+      package: '@opentiny/vue-icon',
+      version: '^3.10.0',
+      destructuring: true
+    })
+
+    // tiny icon 需要调用
+    if (success) {
+      globalHooks.addStatement({
+        position: INSERT_POSITION.BEFORE_PROPS,
+        value: `const ${iconName} = ${exportName}()`,
+        key: iconName
+      })
+    }
+
+    nameObj.componentName = iconName
+    delete nameObj.schema.props.name
+
+  }
+
+
 }
 
 const handleTinyGridSlots = (value, globalHooks, config) => {

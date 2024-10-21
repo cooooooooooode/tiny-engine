@@ -23,6 +23,7 @@ import {
   CanvasBox,
   CanvasCollection,
   CanvasIcon,
+  CanvasIconify,
   CanvasText,
   CanvasSlot,
   CanvasImg,
@@ -58,6 +59,7 @@ export const blockSlotDataMap = reactive({})
 
 const Mapper = {
   Icon: CanvasIcon,
+  Iconify:CanvasIconify,
   Text: CanvasText,
   Collection: CanvasCollection,
   div: CanvasBox,
@@ -431,6 +433,7 @@ const parseObjectData = (data, scope, ctx) => {
 
   // 解析通过属性传递icon图标组件
   if (data.componentName === 'Icon') {
+    debugger
     return getIcon(data.props.name)
   }
   const res = {}

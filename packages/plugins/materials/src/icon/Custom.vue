@@ -3,29 +3,20 @@
     <tiny-search v-model="state.searchValue" placeholder="请输入关键字搜索" clearable @update:modelValue="change">
       <template #prefix> <icon-search /> </template>
     </tiny-search>
-    <tiny-collapse v-model="state.activeName" class="lowcode-scrollbar">
-      <tiny-collapse-item v-for="(item, index) in state.components" :key="item.group" :title="item.group" :name="index">
-        <ul class="component-group" :style="{ gridTemplateColumns }">
-          <template v-for="child in item.children" :key="child.component">
-            <canvas-drag-item
-              v-if="!child.hidden && (child.name?.zh_CN || child.name)"
-              :data="generateNode({ component: child.snippetName || child.component })"
-              @click="componentClick"
-            >
-              <li class="component-item">
-                <div class="component-item-component">
-                  <svg-icon :name="child?.icon?.toLowerCase() || 'row'"></svg-icon>
-                </div>
-                <span class="component-item-name" :title="child.name?.zh_CN || child.name">{{
-                  child.name?.zh_CN || child.name
-                }}</span>
-              </li>
-            </canvas-drag-item>
-          </template>
-        </ul>
-      </tiny-collapse-item>
-      <search-empty :isShow="!state.components.length" />
-    </tiny-collapse>
+
+    <ul class="component-group" :style="{ gridTemplateColumns }">
+      <template v-for="(child,key) in collections" :key="key">
+          <li class="component-item">
+              <div class="component-item-component">
+                <svg-icon :name="child?.icon?.toLowerCase() || 'row'"></svg-icon>
+              </div>
+              <span class="component-item-name" :title="child.name?.zh_CN || child.name">{{
+              child.name?.zh_CN || child.name
+              }}</span>
+          </li>
+      </template>
+    </ul>
+
   </div>
 </template>
 
@@ -36,6 +27,7 @@ import { SearchEmpty } from '@opentiny/tiny-engine-common'
 import { iconSearch } from '@opentiny/vue-icon'
 import { useResource, useCanvas } from '@opentiny/tiny-engine-controller'
 import { CanvasDragItem } from '@opentiny/tiny-engine-canvas'
+import {collections} from './mock'
 
 export default {
   components: {
@@ -44,7 +36,7 @@ export default {
     TinyCollapse: Collapse,
     TinyCollapseItem: CollapseItem,
     CanvasDragItem,
-    SearchEmpty
+    SearchEmpty,
   },
   setup() {
     const COMPONENT_PANEL_COLUMNS = '1fr 1fr 1fr'
@@ -54,9 +46,7 @@ export default {
     const panelState = inject('panelState', {})
     const { components } = resState
 
-    // console.log(JSON.stringify(components))
 
-    // debugger
 
     const fetchComponents = (components, name) => {
       if (!name) {
@@ -117,7 +107,8 @@ export default {
       state,
       change,
       generateNode,
-      componentClick
+      componentClick,
+      collections
     }
   }
 }
