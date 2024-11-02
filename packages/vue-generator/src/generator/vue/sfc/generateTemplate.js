@@ -35,7 +35,6 @@ export const handleTinyIcon = (nameObj, globalHooks) => {
   if (BUILTIN_COMPONENT_NAME.ICON !== nameObj.componentName) {
     return
   }
-  debugger
 
   const name = nameObj.schema.props.name
 
@@ -44,14 +43,7 @@ export const handleTinyIcon = (nameObj, globalHooks) => {
   }
 
   if(name.includes(':')){
-
-    globalHooks.addImport('@iconify/vue', {
-      componentName: "Icon",
-      exportName: "Icon",
-      package: '@iconify/vue',
-      version: '^4.1.1',
-      destructuring: true
-    })
+    // 预览时不做处理，使用 <Icon></Icon>
   }
   else{
     const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`

@@ -22,9 +22,11 @@
       <!-- ICON LIST -->
       <div class="icons-wrap" v-if="state.showIcons">
         <div class="icons-header">
+          <icon icon="icon-park-outline:left-c" width="24" height="24" style="cursor: pointer;color:#999;margin-right: 5px;"
+          @click="closeIconCollection()"></icon>
           <span style="font-size:12px;">图标列表 共({{ state.icons.length }})个</span>
-          <icon icon="ci:close-square" width="24" height="24" style="cursor: pointer;color:#999;margin-right: 5px;"
-            @click="closeIconCollection()"></icon>
+          <!-- <icon icon="ci:close-square" width="24" height="24" style="cursor: pointer;color:#999;margin-right: 5px;"
+            @click="closeIconCollection()"></icon> -->
         </div>
         <div v-if="list.length===0" style="text-align: center;opacity: 0.5;">loading...</div>
         <div class="icons-group" v-bind="containerProps" style="overflow-y: auto;flex:1;">
@@ -262,7 +264,7 @@ export default {
     padding-left: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between
+    // justify-content: space-between
   }
 
   .icons-group {

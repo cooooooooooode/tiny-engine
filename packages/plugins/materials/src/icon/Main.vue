@@ -1,10 +1,10 @@
 <template>
   <div class="components-wrap">
     <tiny-tabs v-model="activeName" tab-style="button-card" class="full-width-tabs" @click="tabClick">
-      <tiny-tab-item name="iconify" title="iconify">
+      <tiny-tab-item name="iconify" title="在线图标">
         <iconify></iconify>
       </tiny-tab-item>
-      <tiny-tab-item name="custom" title="自定义">
+      <tiny-tab-item name="custom" title="我的图标">
         <icon-custom></icon-custom>
       </tiny-tab-item>
     </tiny-tabs>

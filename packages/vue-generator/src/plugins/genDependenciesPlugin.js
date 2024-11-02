@@ -50,9 +50,6 @@ const parseSchema = (schema) => {
     resDeps['@opentiny/vue-icon'] = resDeps['@opentiny/vue']
   }
 
-  // 增加 Iconify 依赖
-  resDeps['@iconify/vue'] = 'latest'
-
   return resDeps
 }
 

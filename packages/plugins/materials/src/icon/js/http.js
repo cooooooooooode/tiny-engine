@@ -10,47 +10,44 @@
  *
  */
 
-import { useHttp,request } from '@opentiny/tiny-engine-http'
+import { useHttp, request } from '@opentiny/tiny-engine-http'
 
 const http = useHttp()
 
-// 自定义图标库 -- 列表
-export const getCustomIconCollections = () => http.get(`/app-center/api/icons/list`)
+// 图标集合 -- 列表
+export const getIconCollections = () => http.post(`/app-center/api/icons/list`)
 
-// 自定义图标库 -- 新增
-export const addCustomIconCollection = ({title}) => http.post('/app-center/api/icons/create', {title})
+// 图标集合 -- 创建集合
+export const createIconCollection = ({ name, prefix }) => http.post('/app-center/api/icons/create', { name, prefix })
 
-// 自定义图标库 -- 删除
-export const delCustomIconCollection = (id) => http.get(`/app-center/api/icons/delete/${id}`)
+// 图标集合 -- 删除集合
+export const removeIconCollection = (prefix) => http.post(`/app-center/api/icons/delete`, { prefix })
 
-// 自定义图标库 -- 更新
-export const updateCustomIconCollection = (id, {title}) =>http.post(`/app-center/api/icons/update/${id}`, {title})
+// 图标集合 -- 导入集合
+export const importIconCollection = ({ name, prefix,iconify }) => http.post(`/app-center/api/icons/import`, { name, prefix,iconify })
 
 
-// 自定义图标 -- 列表
-export const getCustomIcons = () => http.get(`/app-center/api/icon/list`)
+// 图标 -- 新增
+export const importIcon = ({ prefix, name, svg }) => http.post('/app-center/api/icon/import', { prefix, name, svg })
 
-// 自定义图标 -- 新增
-export const addCustomIcon = ({title,name,svg}) => http.post('/app-center/api/icon/create', {title,name,svg})
-
-// 自定义图标 -- 删除
-export const delCustomIcon = (id) => http.get(`/app-center/api/icon/delete/${id}`)
-
-// 自定义图标 -- 更新
-export const updateCustomIcon = (id, {title,name,svg}) =>http.post(`/app-center/api/icon/update/${id}`, {title,name,svg})
-
+// 图标 -- 删除
+export const removeIcon = ({ prefix, name }) => http.post(`/app-center/api/icon/delete`, { prefix, name })
 
 /* iconify 请求解析 */
-const iconifyRequest = request();
-iconifyRequest.interceptors.response.use((res) => {
-  return res.data
-}, (err) => {
-  return Promise.reject(err)
-})
+const iconifyRequest = request()
+iconifyRequest.interceptors.response.use(
+  (res) => {
+    return res.data
+  },
+  (err) => {
+    return Promise.reject(err)
+  }
+)
 
 /* iconify资源——获得所有图标库 */
 export const fetchIconifyCollections = () => iconifyRequest.get(`/iconify/api/collections`)
 /* iconify资源——获得图标库内图标 */
-export const fetchIconifyCollectionIcons = ({prefix}) => iconifyRequest.get(`/iconify/api/collection?prefix=${prefix}&chars=true&aliases=true`)
+export const fetchIconifyCollectionIcons = ({ prefix }) =>
+  iconifyRequest.get(`/iconify/api/collection?prefix=${prefix}&chars=true&aliases=true`)
 /* iconify资源——搜索图标 */
-export const queryIconify = ({query}) => iconifyRequest.get(`/iconify/api/search?query=${query}&limit=999`)
+export const queryIconify = ({ query }) => iconifyRequest.get(`/iconify/api/search?query=${query}&limit=999`)

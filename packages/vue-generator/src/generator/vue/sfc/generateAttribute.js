@@ -356,8 +356,7 @@ export const handleTinyIconPropsHook = (schemaData, globalHooks, config) => {
       const name = value.props.name
 
       if(name.includes(':')){
-        debugger
-
+        // 略过iconify图标
       }
       else{
         const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`

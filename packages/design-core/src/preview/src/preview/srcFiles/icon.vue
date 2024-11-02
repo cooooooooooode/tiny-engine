@@ -1,7 +1,7 @@
 <script>
-import * as SvgIcons from '@opentiny/vue-icon'
 import { Icon, addCollection } from '@iconify/vue';
 import { h } from 'vue'
+import icons from './icons.json'
 
 export default {
   props: {
@@ -16,30 +16,17 @@ export default {
   },
   mounted() {
 
-    const iconsStr = window.localStorage.getItem('icons');
-
-    try {
-
-      const icons = JSON.parse(iconsStr);
-
-      icons.forEach((item) => {
-        addCollection(item)
-      })
-
-    } catch (error) {
-      console.error(error)
-    }
-
-
+    // 注册离线图标集
+    icons.forEach(iconSet=>{
+      addCollection(iconSet)
+    })
 
   },
   setup(props) {
 
     return () => {
       return h('span', { class: 'iconwarp' }, [
-        SvgIcons[props.name]
-          ? (h(SvgIcons[props.name]?.(), { style: { width: '100%', height: '100%' } }) || 'error.')
-          : h(Icon, { icon: props.icon, style: { width: '100%', height: '100%' } }),
+        h(Icon, { icon: props.icon, style: { width: '100%', height: '100%' } })
       ])
     }
 

@@ -95,6 +95,9 @@ const initRenderContext = () => {
   })
 
   document.addEventListener('updateDependencies', updateDependencies)
+  // document.addEventListener('updateIconsDependencies', ()=>{
+  //   debugger
+  // })
 }
 
 let App = null

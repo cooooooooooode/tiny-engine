@@ -17,7 +17,7 @@
         <tiny-tab-item name="blocks" title="区块">
           <block-panel></block-panel>
         </tiny-tab-item>
-        <tiny-tab-item name="icons" title="图标库">
+        <tiny-tab-item name="icons" title="图标">
           <icon-panel></icon-panel>
         </tiny-tab-item>
       </tiny-tabs>

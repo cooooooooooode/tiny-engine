@@ -37,6 +37,7 @@ const blockResource = new Map()
 const http = useHttp()
 
 const resState = reactive({
+  icons:[],
   components: [],
   blocks: [],
   dataSource: [],
@@ -156,6 +157,7 @@ const registerBlock = async (data, notFetchResouce) => {
 }
 
 const clearMaterials = () => {
+  resState.icons = []
   resState.components = []
   resState.blocks = []
   resource.clear()
@@ -253,6 +255,11 @@ const fetchMaterial = async () => {
   const { dslMode, canvasOptions } = getGlobalConfig()
   const bundleUrls = canvasOptions[dslMode].material
   const materials = await Promise.allSettled(bundleUrls.map((url) => http.get(url)))
+  const iconCollections = await useHttp().post(`/app-center/api/icons/list`)
+
+  window.localStorage.setItem('icons',JSON.stringify(iconCollections || []))
+
+  resState.icons = iconCollections || [];
 
   materials.forEach((response) => {
     if (response.status === 'fulfilled' && response.value.materials) {

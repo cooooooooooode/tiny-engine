@@ -22,7 +22,7 @@ import { genSFCWithDefaultPlugin, parseRequiredBlocks } from '@opentiny/tiny-eng
 import importMap from './importMap'
 import srcFiles from './srcFiles'
 import generateMetaFiles, { processAppJsCode } from './generate'
-import { getSearchParams, fetchMetaData, fetchImportMap, fetchAppSchema, fetchBlockSchema } from './http'
+import { getSearchParams, fetchMetaData, fetchImportMap, fetchAppSchema, fetchBlockSchema,fetchIcons } from './http'
 import { PanelType, PreviewTips } from '../constant'
 import { injectDebugSwitch } from './debugSwitch'
 import '@vue/repl/style.css'
@@ -121,9 +121,11 @@ export default {
       fetchAppSchema(queryParams?.app),
       fetchMetaData(queryParams),
       setFiles(srcFiles, 'src/Main.vue'),
-      getImportMap()
+      getImportMap(),
+      fetchIcons(),
     ]
-    Promise.all(promiseList).then(async ([appData, metaData, _void, importMapData]) => {
+    Promise.all(promiseList).then(async ([appData, metaData, _void, importMapData,iconSets]) => {
+
       addUtilsImportMap(importMapData, metaData.utils || [])
 
       const blocks = await getBlocksSchema(queryParams.pageInfo?.schema)
@@ -169,7 +171,7 @@ export default {
           panelName = 'Main.vue'
         }
 
-        const newPanelValue = panelValue.replace(/<script\s*setup\s*>([\s\S]*)<\/script>/, (match, p1) => {
+        const newPanelValue = panelValue?.replace(/<script\s*setup\s*>([\s\S]*)<\/script>/, (match, p1) => {
           if (!p1) {
             // eslint-disable-next-line no-useless-escape
             return '<script setup><\/script>'
@@ -195,6 +197,7 @@ export default {
       const appJsCode = processAppJsCode(newFiles['app.js'], queryParams.styles)
 
       newFiles['app.js'] = appJsCode
+      newFiles['icons.json'] = JSON.stringify(iconSets || [])
 
       pageCode.map(fixScriptLang).forEach(assignFiles)
 

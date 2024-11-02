@@ -1,23 +1,14 @@
 <template>
-  <tiny-popover
-    trigger="hover"
-    :open-delay="1000"
-    popper-class="toolbar-right-popover"
-    append-to-body
-    content="生成当前应用代码到本地文件"
-  >
+  <tiny-popover trigger="hover" :open-delay="1000" popper-class="toolbar-right-popover" append-to-body
+    content="生成当前应用代码到本地文件">
     <template #reference>
       <span class="icon" @click="generate">
         <svg-icon :name="icon"></svg-icon>
       </span>
     </template>
   </tiny-popover>
-  <generate-file-selector
-    :visible="state.showDialogbox"
-    :data="state.saveFilesInfo"
-    @confirm="confirm"
-    @cancel="cancel"
-  ></generate-file-selector>
+  <generate-file-selector :visible="state.showDialogbox" :data="state.saveFilesInfo" @confirm="confirm"
+    @cancel="cancel"></generate-file-selector>
 </template>
 
 <script>
@@ -117,16 +108,115 @@ export default {
           extraList.push(getBlocksSchema(item.value[0].content, blockSet))
         }
       })
-      ;(await Promise.allSettled(extraList)).forEach((item) => {
-        if (item.status === 'fulfilled' && item.value) {
-          res.push(...item.value)
-        }
-      })
+        ; (await Promise.allSettled(extraList)).forEach((item) => {
+          if (item.status === 'fulfilled' && item.value) {
+            res.push(...item.value)
+          }
+        })
 
       return res
     }
 
-    const instance = generateApp()
+    /* 获得图表库资源列表 */
+    const iconsMap = {};
+    const getIconCollections = async ()=>{
+      const icons = await useHttp().post(`/app-center/api/icons/list`);
+      Array.isArray(icons) && icons.forEach(collection=>{
+        for(let name in collection.icons){
+          iconsMap[`${collection.name}:${name}`] = {
+            body:collection.icons[name].body,
+            width:collection.width,
+            height:collection.height
+          };
+        }
+      })
+    }
+    /* 遍历schema查询所有使用到的自定义图标 */
+    function findUniqueIcons(Pages) {
+      const uniqueIcons = {};
+
+      function traverse(node) {
+        if (node.componentName === "Icon") {
+          const name = node.props.name;
+          if (!uniqueIcons[name]) {
+            uniqueIcons[name] = node;
+          }
+        }
+
+        if (node.children) {
+          node.children.forEach(traverse);
+        }
+      }
+
+      Pages.forEach(page=>traverse(page));
+
+      return Object.values(uniqueIcons);
+    }
+
+    /* 生成svg文件 */
+    function createSVG({width,height,body}){
+
+      return `<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 ${width} ${height}">${body}</svg>`
+
+    }
+
+    /* 生成自定义图标文件 */
+    const addIconAssets = () => {
+      return {
+        name: 'importIconsFile',
+        description: '写入图标文件',
+        run(schema, { config }) {
+          const pages = schema.pageSchema
+          const { customHooks = [] } = config
+
+          const icons = findUniqueIcons(schema.pageSchema)
+
+          const resPage = [];
+
+          icons.forEach(icon => {
+
+            if(icon.props.name.includes(':')) {
+
+              const collectionName = icon.props.name.split(':')[0]
+              const iconName = icon.props.name.split(':')[1]
+
+              // 如果存在图标资源则写入文件
+              if(iconsMap[`${collectionName}:${iconName}`]){
+                resPage.push({
+                  fileType: 'svg',
+                  fileName: `${iconName}.svg`,
+                  path: `./src/assets/icons/${collectionName}`,
+                  fileContent: createSVG(iconsMap[`${collectionName}:${iconName}`])
+                })
+              }
+            }
+          })
+          return resPage
+        }
+      }
+    }
+
+    const instance = generateApp({
+      customHooks: [
+        (nameObj, globalHooks) => {
+          const name = nameObj.schema.props.name
+          if (!name) {
+            return
+          }
+          if (name.includes(':')) {
+            // Icon 出码时 转换格式 {prefix}-{collection}-{icon}
+            nameObj.componentName = `i-${name.replace(':', '-')}`
+          }
+
+        }
+      ],
+      customPlugins: {
+        transform: [
+          addIconAssets()
+        ]
+      }
+
+    })
 
     const getAllPageDetails = async (pageList) => {
       const detailPromise = pageList.map(({ id }) => useLayout().getPluginApi('AppManage').getPageById(id))
@@ -160,6 +250,8 @@ export default {
       const blockSet = new Set()
       const list = pageDetailList.map((page) => getBlocksSchema(page.page_content, blockSet))
       const blocks = await Promise.allSettled(list)
+
+      await getIconCollections()
 
       const blockSchema = []
       blocks.forEach((item) => {
