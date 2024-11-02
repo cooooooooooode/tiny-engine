@@ -31,6 +31,7 @@ export default (schema, icons = []) => {
       vue(),
       vueJsx(),
       Icons({
+        autoInstall: true,
         compiler: "vue3",
         customCollections: {
           ${createCollectionLoaders(icons)}
