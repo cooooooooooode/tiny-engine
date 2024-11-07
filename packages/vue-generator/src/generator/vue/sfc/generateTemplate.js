@@ -42,28 +42,36 @@ export const handleTinyIcon = (nameObj, globalHooks) => {
     return
   }
 
-  const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`
-  const exportName = name.replace(TINY_ICON, 'icon')
+  if(name.includes(':')){
+    // 预览时不做处理，使用 <Icon></Icon>
+  }
+  else{
+    const iconName = name.startsWith(TINY_ICON) ? name : `Tiny${name}`
+    const exportName = name.replace(TINY_ICON, 'icon')
 
-  const success = globalHooks.addImport('@opentiny/vue-icon', {
-    componentName: exportName,
-    exportName: exportName,
-    package: '@opentiny/vue-icon',
-    version: '^3.10.0',
-    destructuring: true
-  })
-
-  // tiny icon 需要调用
-  if (success) {
-    globalHooks.addStatement({
-      position: INSERT_POSITION.BEFORE_PROPS,
-      value: `const ${iconName} = ${exportName}()`,
-      key: iconName
+    const success = globalHooks.addImport('@opentiny/vue-icon', {
+      componentName: exportName,
+      exportName: exportName,
+      package: '@opentiny/vue-icon',
+      version: '^3.10.0',
+      destructuring: true
     })
+
+    // tiny icon 需要调用
+    if (success) {
+      globalHooks.addStatement({
+        position: INSERT_POSITION.BEFORE_PROPS,
+        value: `const ${iconName} = ${exportName}()`,
+        key: iconName
+      })
+    }
+
+    nameObj.componentName = iconName
+    delete nameObj.schema.props.name
+
   }
 
-  nameObj.componentName = iconName
-  delete nameObj.schema.props.name
+
 }
 
 const handleTinyGridSlots = (value, globalHooks, config) => {

@@ -17,6 +17,9 @@
         <tiny-tab-item name="blocks" title="区块">
           <block-panel></block-panel>
         </tiny-tab-item>
+        <tiny-tab-item name="icons" title="图标">
+          <icon-panel></icon-panel>
+        </tiny-tab-item>
       </tiny-tabs>
       <block-group-panel></block-group-panel>
       <block-version-select></block-version-select>
@@ -29,6 +32,7 @@ import { ref, reactive, provide } from 'vue'
 import { Tabs, TabItem } from '@opentiny/vue'
 import { PluginPanel, SvgButton } from '@opentiny/tiny-engine-common'
 import ComponentPanel from './component/Main.vue'
+import IconPanel from './icon/Main.vue'
 import BlockPanel from './block/Main.vue'
 import BlockGroupPanel from './block/BlockGroupPanel.vue'
 import BlockVersionSelect from './block/BlockVersionSelect.vue'
@@ -47,6 +51,7 @@ export default {
     PluginPanel,
     ComponentPanel,
     BlockPanel,
+    IconPanel,
     BlockGroupPanel,
     BlockVersionSelect,
     SvgButton

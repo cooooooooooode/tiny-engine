@@ -273,6 +273,7 @@ export default {
         }
 
         if (property !== 'name' && props.property.widget.component === 'MetaSelectIcon') {
+          debugger
           // icon以组件形式传入，实现类似:icon="IconPlus"的图标配置（排除Icon组件本身）
           value = {
             componentName: 'Icon',

@@ -54,6 +54,10 @@ export default {
     const panelState = inject('panelState', {})
     const { components } = resState
 
+    // console.log(JSON.stringify(components))
+
+    // debugger
+
     const fetchComponents = (components, name) => {
       if (!name) {
         return components

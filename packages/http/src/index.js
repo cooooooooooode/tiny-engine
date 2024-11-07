@@ -153,3 +153,5 @@ export const initHttp = ({ env }) => {
 }
 
 export const useHttp = () => createHttp({ enableMock: isMock() })
+
+export const request = axios;

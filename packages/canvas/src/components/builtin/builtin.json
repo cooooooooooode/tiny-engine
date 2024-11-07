@@ -332,6 +332,26 @@
                           "component": "MetaSelectIcon",
                           "props": {}
                         }
+                      },
+                      {
+                        "property": "icon",
+                        "type": "String",
+                        "defaultValue": "IconDel",
+                        "bindState": true,
+                        "label": {
+                          "text": {
+                            "zh_CN": "图标类型"
+                          }
+                        },
+                        "cols": 12,
+                        "rules": [],
+                        "widget": {
+                          "component": "MetaInput",
+                          "props": {
+                            "type": "text",
+                            "autosize": true
+                          }
+                        }
                       }
                     ]
                   }
@@ -500,7 +520,8 @@
               "schema": {
                 "componentName": "Icon",
                 "props": {
-                  "name": "IconDel"
+                  "name": "IconDel",
+                  "icon": "IconDel"
                 }
               }
             },

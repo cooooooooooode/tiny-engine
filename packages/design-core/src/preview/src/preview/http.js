@@ -58,3 +58,4 @@ export const fetchImportMap = async () => {
 
 export const fetchAppSchema = async (id) => http.get(`/app-center/v1/api/apps/schema/${id}`)
 export const fetchBlockSchema = async (blockName) => http.get(`/material-center/api/block?label=${blockName}`)
+export const fetchIcons = async () => http.post(`/app-center/api/icons/list`)

@@ -18,13 +18,14 @@ function genPagePlugin(options = {}) {
      * @param {import('@opentiny/tiny-engine-dsl-vue').IAppSchema} schema
      * @returns
      */
-    run(schema) {
+    run(schema, { config }) {
       const pages = schema.pageSchema
+      const { customHooks = [] } = config
 
       const resPage = []
 
       for (const page of pages) {
-        const res = genSFCWithDefaultPlugin(page, schema.componentsMap, sfcConfig)
+        const res = genSFCWithDefaultPlugin(page, schema.componentsMap, sfcConfig, customHooks)
 
         resPage.push({
           fileType: 'vue',

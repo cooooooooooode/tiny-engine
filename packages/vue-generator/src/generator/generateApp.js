@@ -34,7 +34,7 @@ export function generateApp(config = {}) {
     parseSchema: parseSchemaPlugin(config.pluginConfig?.parseSchema || {})
   }
 
-  const { customPlugins = {} } = config
+  const { customPlugins = {},customHooks = {} } = config
   const {
     template,
     block,
@@ -69,7 +69,8 @@ export function generateApp(config = {}) {
       transform: [...Object.values(mergeWithDefaultPlugin), ...transform],
       transformEnd: [formatCode || defaultPlugins.formatCode, ...transformEnd]
     },
-    context: config?.customContext || {}
+    context: config?.customContext || {},
+    customHooks
   })
 
   return codeGenInstance

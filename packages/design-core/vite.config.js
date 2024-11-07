@@ -43,6 +43,11 @@ const config = {
       '/platform-center/api': {
         target: origin,
         changeOrigin: true
+      },
+      '/iconify/api': {
+        target: 'https://api.iconify.design/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/iconify\/api/, ""),
       }
     }
   },
@@ -151,6 +156,7 @@ const devAlias = {
   '@opentiny/tiny-engine-plugin-help': path.resolve(__dirname, '../plugins/help/index.js'),
   '@opentiny/tiny-engine-plugin-schema': path.resolve(__dirname, '../plugins/schema/index.js'),
   '@opentiny/tiny-engine-plugin-page': path.resolve(__dirname, '../plugins/page/index.js'),
+
   '@opentiny/tiny-engine-plugin-i18n': path.resolve(__dirname, '../plugins/i18n/index.js'),
   '@opentiny/tiny-engine-plugin-bridge': path.resolve(__dirname, '../plugins/bridge/index.js'),
   '@opentiny/tiny-engine-plugin-tutorial': path.resolve(__dirname, '../plugins/tutorial/index.js'),

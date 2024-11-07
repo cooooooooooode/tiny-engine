@@ -28,6 +28,7 @@ const text2Span = (schema) => {
 }
 
 const tinyIcon = (schema) => {
+  debugger
   const { componentName, props = {} } = schema
 
   if (componentName === BUILTIN_COMPONENT_NAME.ICON && props.name) {

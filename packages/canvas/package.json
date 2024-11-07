@@ -27,6 +27,7 @@
   "homepage": "https://opentiny.design/tiny-engine",
   "dependencies": {
     "@babel/core": "7.18.13",
+    "@iconify/vue": "^4.1.2",
     "@opentiny/tiny-engine-builtin-component": "workspace:*",
     "@opentiny/tiny-engine-controller": "workspace:*",
     "@opentiny/tiny-engine-i18n-host": "workspace:*",
